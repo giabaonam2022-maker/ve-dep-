@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vẻ đẹp thiên văn</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--c:#5b9cff;color-scheme:dark}
+html,body{margin:0;height:100%;background:#02030a;overflow:hidden;font-family:Inter,system-ui,sans-serif;color:#eef2fb;user-select:none}
+canvas{position:fixed;inset:0;display:block}
+#hud>*,#ch,#tr,#sc,#ob,#sl,#ck{position:fixed;pointer-events:none;text-shadow:0 1px 8px #000}
+#ch{top:26px;left:34px;display:flex;align-items:center;gap:10px;font:600 12px/1 Inter,sans-serif;letter-spacing:.16em;color:#a9b8e0}
+#ch b{font-size:17px;color:var(--c)}#ch i{width:26px;height:1px;background:var(--c)}
+#tr{top:28px;right:34px;display:flex;align-items:center;gap:16px;font:600 9px/1 Inter,sans-serif;letter-spacing:.2em;color:#7f8aa8}
+#dots{display:flex;gap:6px}#dots u{width:4px;height:4px;border-radius:50%;background:#4a5370;display:block}#dots u.a{background:var(--c);box-shadow:0 0 8px var(--c)}
+#ti{top:48px;left:0;right:0;text-align:center;font:800 22px/1 Inter,sans-serif;letter-spacing:.14em}
+#su{top:88px;left:0;right:0;text-align:center;font:600 15px/1 Inter,sans-serif}.o{color:#ffb25a}
+#bl,#br{bottom:44px;padding:9px 16px;font:600 15px/1.45 Inter,sans-serif;background:linear-gradient(90deg,rgba(0,0,0,.5),transparent)}
+#bl{left:40px;border-left:3px solid var(--c)}#br{right:40px;text-align:right;border-right:3px solid var(--c);background:linear-gradient(270deg,rgba(0,0,0,.5),transparent)}
+#cap{left:0;right:0;bottom:92px;text-align:center;font:400 12px/1 Inter,sans-serif;color:#c9d2ea}
+body[data-s=sat] #cap{top:22%;bottom:auto;font-size:16px;color:#8d96aa}
+body[data-s=bh] #cap{top:14%;bottom:auto;font:600 15px Inter;width:max-content;margin:auto;padding:4px 16px;border-radius:7px;background:rgba(0,0,0,.4)}
+#sc{bottom:22px;left:50%;width:340px;margin-left:-170px;height:30px}
+#sc em{position:absolute;top:6px;left:0;right:0;height:1px;background:#8590ad}
+#sc span{position:absolute;top:10px;font:400 8px Inter;color:#8590ad;transform:translateX(-50%);white-space:nowrap}
+#sc span:before{content:"";position:absolute;left:50%;top:-6px;height:5px;width:1px;background:#8590ad}
+#sd{position:absolute;top:2px;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:var(--c);box-shadow:0 0 8px var(--c)}
+#ob,#sl,#ck{display:none}
+body[data-s=orr] #ob{display:block;top:36px;left:42px;border-left:2px solid #c9a35a;padding-left:16px;font:400 11px/1.9 Inter;letter-spacing:.14em;color:#8e97b2}
+#ob i{font-style:normal;display:inline-block;width:100px}#ob b{font-weight:400;color:#cfd6e8;letter-spacing:.05em}
+body[data-s=sun] #sl{display:block;left:21%;top:50%;transform:translateY(-50%);text-align:center;font:800 15px Inter}
+#sl div{width:60px;height:5px;border:1px solid #fff;border-top:0;margin:6px auto;opacity:.8}
+#sl small{display:block;font:400 11px Inter;padding:4px 10px;background:rgba(0,0,0,.45);border-radius:6px;white-space:nowrap}
+body[data-s=bh] #ck{display:block;right:5.5%;top:35%;text-align:center;font:600 11px Inter;color:#d7dcec}
+#ck svg{width:34px;height:34px;display:block;margin:0 auto 5px}#ck line{transform-origin:17px 17px;animation:sp 3s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+body[data-s=orr] #ch,body[data-s=orr] #tr,body[data-s=orr] #sc,body[data-s=out] #ch,body[data-s=out] #tr,body[data-s=out] #sc{display:none}
+#hud{animation:fi 1.2s both}@keyframes fi{from{opacity:0}}
+#hint{position:fixed;left:0;right:0;bottom:64px;text-align:center;font:600 12px Inter,sans-serif;letter-spacing:.14em;color:#d7dcec;pointer-events:none;z-index:5;animation:pl 1.6s ease-in-out infinite}@keyframes pl{50%{opacity:.35}}
+body[data-s=ttl] #ch,body[data-s=ttl] #tr,body[data-s=ttl] #sc{display:none}
+body[data-s=ttl] #ti{top:34%;font:800 58px/1.04 Inter,sans-serif;letter-spacing:.07em;color:#ffe0b0;text-shadow:0 0 30px #ff9a3a,0 0 8px #fff1d0}
+body[data-s=ttl] #su{top:calc(34% + 128px);font-size:14px;color:#e8dcc4}
+#cap{line-height:1.55}#cap small{font-size:11px;color:#aab3cc}
+#fade{position:fixed;inset:0;background:#000;pointer-events:none}
+#pb{position:fixed;left:0;bottom:0;height:2px;background:var(--c);opacity:.7}
+#ld{position:fixed;inset:0;display:grid;place-items:center;background:#02030a;font:600 12px Inter;letter-spacing:.2em;color:#8d97b8;z-index:9}
+</style></head><body data-s="orr">
+<div id="ld">ĐANG DỰNG VŨ TRỤ…</div>
+<div id="ch"><b></b><i></i><span></span></div>
+<div id="tr"><span>VẺ ĐẸP THIÊN VĂN</span><div id="dots"></div></div>
+<div id="hud"><div id="ti"></div><div id="su"></div><div id="bl"></div><div id="br"></div><div id="cap"></div></div>
+<div id="sc"><em></em><span style="left:0">1 km</span><span style="left:17%">10³ km</span><span style="left:34%">AU</span><span style="left:51%">năm AS</span><span style="left:67%">10³</span><span style="left:81%">10⁶</span><span style="left:96%">10⁹ NAS</span><b id="sd"></b></div>
+<div id="ob"><div><i>TRÁI ĐẤT</i><b id="e1">0.00</b> vòng</div><div><i>KIM TINH</i><b id="e2">0.00</b> vòng</div></div>
+<div id="sl">17 Trái Đất<div></div><small>đường kính 215 495 km</small></div>
+<div id="ck"><svg viewBox="0 0 34 34" fill="none" stroke="#f0c36a" stroke-width="2"><circle cx="17" cy="17" r="15"/><line x1="17" y1="17" x2="17" y2="6"/></svg>× 0,94</div>
+<audio id="au" src="audio.mp3" preload="auto"></audio>
+<div id="hint">🔊 Nhấn bất kỳ đâu để bật nhạc</div>
+<div id="fade"></div><div id="pb"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>addEventListener('load',()=>{if(typeof THREE=='undefined')document.getElementById('ld').textContent='Không tải được three.js — hãy kiểm tra kết nối internet'})</script>
+<script>
+const $=s=>document.querySelector(s),PI=Math.PI,TAU=PI*2,V3=(x,y,z)=>new THREE.Vector3(x,y,z);
+const ease=t=>t*t*(3-2*t),lp=(a,b,t)=>a+(b-a)*t,cl=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
+const S=new THREE.Scene(),C=new THREE.PerspectiveCamera(50,1,.1,2000);
+const R=new THREE.WebGLRenderer({antialias:true});R.setPixelRatio(Math.min(devicePixelRatio,2));R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=1.15;document.body.prepend(R.domElement);
+const rs=()=>{R.setSize(innerWidth,innerHeight);C.aspect=innerWidth/innerHeight;C.updateProjectionMatrix()};addEventListener('resize',rs);rs();
+const look=(x,y,z,tx,ty,tz)=>{C.position.set(x,y,z);C.lookAt(tx,ty,tz)};
+/* ---------- noise & textures ---------- */
+const hs=(x,y,z)=>{const n=Math.sin(x*127.1+y*311.7+z*74.7)*43758.5453;return n-Math.floor(n)},sm=t=>t*t*(3-2*t);
+function vn(x,y,z){const ix=Math.floor(x),iy=Math.floor(y),iz=Math.floor(z),fx=sm(x-ix),fy=sm(y-iy),fz=sm(z-iz);let r=0;for(let i=0;i<8;i++){const a=i&1,b=i>>1&1,c=i>>2&1;r+=hs(ix+a,iy+b,iz+c)*(a?fx:1-fx)*(b?fy:1-fy)*(c?fz:1-fz)}return r}
+const fbm=(x,y,z,o=5)=>{let s=0,a=.5;for(let i=0;i<o;i++){s+=a*vn(x,y,z);x*=2;y*=2;z*=2;a/=2}return s};
+const mx=(a,b,t)=>{t=cl(t);return a.map((v,i)=>v+(b[i]-v)*t)};
+function sphTex(w,h,f){const c=document.createElement('canvas');c.width=w;c.height=h;const g=c.getContext('2d'),d=g.createImageData(w,h);for(let j=0;j<h;j++){const la=(.5-j/h)*PI;for(let i=0;i<w;i++){const lo=i/w*TAU,col=f(Math.cos(la)*Math.cos(lo),Math.sin(la),Math.cos(la)*Math.sin(lo)),k=(j*w+i)*4;d.data[k]=col[0];d.data[k+1]=col[1];d.data[k+2]=col[2];d.data[k+3]=255}}g.putImageData(d,0,0);const t=new THREE.CanvasTexture(c);t.anisotropy=4;return t}
+const cvT=(w,h,f)=>{const c=document.createElement('canvas');c.width=w;c.height=h;f(c.getContext('2d'));return new THREE.CanvasTexture(c)};
+const gt=cvT(128,128,g=>{const r=g.createRadialGradient(64,64,0,64,64,64);r.addColorStop(0,'rgba(255,255,255,1)');r.addColorStop(.2,'rgba(255,255,255,.4)');r.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=r;g.fillRect(0,0,128,128)});
+const MS=o=>new THREE.MeshStandardMaterial(o),MB=o=>new THREE.MeshBasicMaterial(o);
+const sph=(r,m,w=64)=>new THREE.Mesh(new THREE.SphereGeometry(r,w,w/2),m);
+const glow=(col,s,o=1)=>{const m=new THREE.Sprite(new THREE.SpriteMaterial({map:gt,color:col,blending:THREE.AdditiveBlending,depthWrite:false,transparent:true,opacity:o,toneMapped:false}));m.scale.set(s,s,1);return m};
+const atmo=(r,col)=>new THREE.Mesh(new THREE.SphereGeometry(r,64,32),new THREE.ShaderMaterial({transparent:true,side:THREE.BackSide,blending:THREE.AdditiveBlending,depthWrite:false,uniforms:{c:{value:new THREE.Color(col)}},vertexShader:'varying vec3 n;void main(){n=normalize(normalMatrix*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:'varying vec3 n;uniform vec3 c;void main(){float i=pow(max(.7-dot(n,vec3(0.,0.,1.)),0.),4.);gl_FragColor=vec4(c*i*3.,i);}'}));
+function gear(r,n,h,m){const s=new THREE.Shape();for(let i=0;i<n*4;i++){const a=i/(n*4)*TAU,q=r*(i%4<2?1:.86);i?s.lineTo(Math.cos(a)*q,Math.sin(a)*q):s.moveTo(q,0)}const p=new THREE.Path();p.absarc(0,0,r*.16,0,TAU,true);s.holes.push(p);for(let k=0;k<5;k++){const a=k/5*TAU,q2=new THREE.Path();q2.absarc(Math.cos(a)*r*.58,Math.sin(a)*r*.58,r*.17,0,TAU,true);s.holes.push(q2)}const e=new THREE.Mesh(new THREE.ExtrudeGeometry(s,{depth:h,bevelEnabled:true,bevelThickness:.05,bevelSize:.05,bevelSegments:2}),m);e.rotation.x=-PI/2;return e}
+function galaxy(n,Rd){const p=new Float32Array(n*3),c=new Float32Array(n*3),gs=()=>(Math.random()+Math.random()+Math.random()-1.5);for(let i=0;i<n;i++){let x,y,z;if(Math.random()<.22){x=gs()*Rd*.18;z=gs()*Rd*.18;y=gs()*Rd*.1}else{const r=Rd*Math.pow(Math.random(),1.25),a=r*.2+Math.floor(Math.random()*2)*PI+gs()*(.35+.5*r/Rd);x=Math.cos(a)*r;z=Math.sin(a)*r;y=gs()*Rd*.03*(1.2-r/Rd)}p.set([x,y,z],i*3);const d=Math.hypot(x,z)/Rd,k=Math.random()<.04?[1,.5,.7]:mx([1,.82,.55],[.55,.7,1],d*1.3),b=.5+Math.random()*.5;c.set([k[0]*b,k[1]*b,k[2]*b],i*3)}const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(p,3));g.setAttribute('color',new THREE.BufferAttribute(c,3));const gp=new THREE.Group();gp.add(new THREE.Points(g,new THREE.PointsMaterial({size:.3,vertexColors:true,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending})),glow(0xffd9a0,Rd*.7,.9));return gp}
+const bandT=sphTex(256,128,(x,y,z)=>mx([150,100,60],[236,206,150],.5+.5*Math.sin(y*26+fbm(x*3,y*3,z*3,3)*5)));
+const earthT=sphTex(384,192,(x,y,z)=>{const n=fbm(x*2.4+5,y*2.4,z*2.4,6),ay=Math.abs(y);let c=n<.5?mx([4,22,70],[34,104,176],(n-.3)*5):mx([42,100,36],[158,128,82],(n-.5)*4+ay*.4);if(ay>.88)c=mx(c,[240,246,252],(ay-.88)*20);return mx(c,[255,255,255],(fbm(x*3.5+9,y*5,z*3.5,5)-.52)*3.5)});
+const marsT=sphTex(256,128,(x,y,z)=>{const n=fbm(x*3,y*3,z*3,6);let c=mx([118,48,24],[208,118,66],n*1.7-.2);c=mx(c,[70,34,24],(fbm(x*2+4,y*2,z*2,4)-.55)*4);return Math.abs(y)>.9?mx(c,[245,245,250],(Math.abs(y)-.9)*30):c});
+const sunT=sphTex(384,192,(x,y,z)=>{const n=fbm(x*3,y*3,z*3,6),g=fbm(x*9+3,y*9,z*9,3);let c=mx([222,82,10],[255,204,74],(n-.3)*2.2+(g-.5)*.8);const sp=fbm(x*2.2+7,y*2.2,z*2.2,4);return sp>.62&&Math.abs(y)<.5?mx(c,[60,15,5],(sp-.62)*14):c});
+const plutoT=sphTex(256,128,(x,y,z)=>mx([128,88,62],[238,218,188],fbm(x*4,y*4,z*4,5)*1.9-.35));
+const charT=sphTex(256,128,(x,y,z)=>mx([84,84,90],[176,170,168],fbm(x*5,y*5,z*5,5)*1.6));
+const starT=sphTex(256,128,(x,y,z)=>mx([196,66,18],[255,158,64],fbm(x*14,y*14,z*14,3)*1.7-.2));
+const cmbT=sphTex(384,192,(x,y,z)=>{const t=cl((fbm(x*6,y*6,z*6,5)+fbm(x*16,y*16,z*16,2)*.3-.38)*3);return t<.5?mx([44,84,206],[236,236,236],t*2):mx([236,236,236],[242,122,30],(t-.5)*2)});
+const beamT=cvT(128,4,g=>{const l=g.createLinearGradient(0,0,128,0);l.addColorStop(0,'rgba(255,200,120,0)');l.addColorStop(.5,'rgba(255,214,150,.85)');l.addColorStop(1,'rgba(255,200,120,0)');g.fillStyle=l;g.fillRect(0,0,128,4)});
+const coneT=cvT(4,128,g=>{const l=g.createLinearGradient(0,0,0,128);l.addColorStop(0,'rgba(255,255,255,0)');l.addColorStop(1,'rgba(255,255,255,1)');g.fillStyle=l;g.fillRect(0,0,4,128)});
+const merT=sphTex(256,128,(x,y,z)=>{const n=fbm(x*5,y*5,z*5,6),r=Math.pow(Math.abs(Math.sin(vn(x*11,y*11,z*11)*14)),10);return mx(mx([66,62,58],[176,166,154],n*1.6),[28,26,24],r*.7)});
+const venT=sphTex(256,128,(x,y,z)=>{const w=fbm(x*2+3,y*2,z*2,3)*2.5,n=fbm(x*3+w,y*7+w,z*3,5);return mx([196,138,62],[248,226,160],n*1.9-.25)});
+const jupT=sphTex(384,192,(x,y,z)=>{const w=fbm(x*4,y*9,z*4,5);let c=mx([128,76,44],[240,218,182],.5+.5*Math.sin(y*21+w*8));c=mx(c,[178,96,54],(fbm(x*7,y*28,z*7,4)-.5)*1.4);const d=Math.hypot(x-.34,(y+.34)*2.2,z-.876);return d<.2?mx(c,[192,72,44],(.2-d)*12):c});
+const satT=sphTex(256,128,(x,y,z)=>{const w=fbm(x*3,y*8,z*3,4);return mx([186,152,102],[242,224,176],.5+.5*Math.sin(y*16+w*4)*.8)});
+const uraT=sphTex(256,128,(x,y,z)=>mx([136,206,214],[178,232,236],.5+.25*Math.sin(y*12)+fbm(x*3,y*6,z*3,3)*.3));
+const nepT=sphTex(256,128,(x,y,z)=>{const w=fbm(x*3,y*10,z*3,5);let c=mx([24,48,150],[70,112,230],.5+.5*Math.sin(y*14+w*5));const d=Math.hypot(x-.5,(y+.3)*1.8,z-.8);return d<.18?mx(c,[10,20,70],(.18-d)*14):c});
+const PT=[merT,venT,earthT,marsT,jupT,satT,uraT,nepT],AC=[0x000000,0xffd890,0x6aa8ff,0xff8a60,0xffd8a8,0xffe6b0,0x8ae8f0,0x5a7aff];
+const ringT=cvT(256,4,g=>{for(let x=0;x<256;x++){const r=x/256;let a=.9*(.55+.45*Math.sin(x*.9)*Math.sin(x*.23+1));if(r>.57&&r<.63)a=.04;if(r<.12)a*=.35;const v=196+Math.sin(x*.5)*26;g.fillStyle='rgba('+v+','+(v-16)+','+(v-56)+','+a+')';g.fillRect(x,0,1,4)}});
+const bmp=(w,hh,f)=>sphTex(w,hh,(x,y,z)=>{const v=cl(f(x,y,z))*255;return[v,v,v]});
+const cr=(x,y,z,s)=>Math.pow(Math.abs(Math.sin(vn(x*s,y*s,z*s)*14)),10);
+const earthB=bmp(256,128,(x,y,z)=>{const n=fbm(x*2.4+5,y*2.4,z*2.4,6);return n<.5?.3:.3+(n-.5)*2.2+fbm(x*14,y*14,z*14,3)*.25});
+const cloudT=bmp(512,256,(x,y,z)=>(fbm(x*3.5+9,y*5,z*3.5,6)-.45)*3);
+const moonB=bmp(256,128,(x,y,z)=>fbm(x*6,y*6,z*6,5)*.8+cr(x,y,z,9)*.35);
+const marsB=bmp(256,128,(x,y,z)=>fbm(x*3,y*3,z*3,6)+cr(x,y,z,8)*.2);
+const merB=bmp(256,128,(x,y,z)=>fbm(x*5,y*5,z*5,6)*.7+cr(x,y,z,11)*.5);
+const BM=[merB,null,earthB,marsB,null,null,null,null];
+const cityT=bmp(256,128,(x,y,z)=>{const n=fbm(x*2.4+5,y*2.4,z*2.4,6),c=fbm(x*30,y*30,z*30,2);return n>.52&&c>.62&&Math.abs(y)<.8?1:0});
+const mwT=sphTex(512,256,(x,y,z)=>{const v=cl(Math.exp(-y*y*9)*(fbm(x*4,y*6,z*4,6)*1.7-.4)-fbm(x*10+4,y*14,z*10,3)*.12)*.6*255;return[v,v*.92,v*.8]});
+const TL=new THREE.TextureLoader();TL.setCrossOrigin('anonymous');
+const ld=(f,cb)=>TL.load('https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/textures/planets/'+f,cb,undefined,()=>{});
+const TX='https://cdn.jsdelivr.net/gh/jeromeetienne/threex.planets@master/images/',OM=[];
+const RM=(m,f,b,k=1)=>TL.load(TX+f,t=>{m.map=t;m.bumpMap=null;m.needsUpdate=true;if(b)TL.load(TX+b,u=>{m.bumpMap=u;m.bumpScale=k;m.needsUpdate=true},undefined,()=>{})},undefined,()=>{});
+const RR=m=>{TL.load(TX+'saturnringcolor.jpg',t=>{m.map=t;m.needsUpdate=true},undefined,()=>{});TL.load(TX+'saturnringpattern.gif',t=>{m.alphaMap=t;m.needsUpdate=true},undefined,()=>{})};
+const SUNS=[],sunM=()=>{const m=new THREE.ShaderMaterial({uniforms:{t:{value:0},k:{value:new THREE.Vector3(1,1,1)}},vertexShader:'varying vec3 p,n,v;void main(){p=position;n=normalize(normalMatrix*normal);vec4 m=modelViewMatrix*vec4(position,1.);v=normalize(-m.xyz);gl_Position=projectionMatrix*m;}',fragmentShader:`varying vec3 p,n,v;uniform float t;uniform vec3 k;
+float h(vec3 q){return fract(sin(dot(q,vec3(127.1,311.7,74.7)))*43758.5453);}
+float vn(vec3 q){vec3 i=floor(q),f=fract(q);f=f*f*(3.-2.*f);float r=0.;for(int a=0;a<2;a++)for(int b=0;b<2;b++)for(int c=0;c<2;c++){vec3 o=vec3(float(a),float(b),float(c));r+=h(i+o)*mix(1.-f.x,f.x,o.x)*mix(1.-f.y,f.y,o.y)*mix(1.-f.z,f.z,o.z);}return r;}
+float fb(vec3 q){float s=0.,a=.5;for(int i=0;i<6;i++){s+=a*vn(q);q=q*2.03+vec3(1.7,9.2,3.1);a*=.5;}return s;}
+void main(){vec3 q=normalize(p)*3.;float w=fb(q*.7+t*.03);float g=fb(q*2.2+w*1.6+vec3(0.,t*.07,0.));float c=fb(q*7.+g*2.-t*.1);float sp=smoothstep(.62,.72,fb(q*.9+5.));float I=g*.65+c*.5;vec3 col=mix(vec3(.62,.12,.02),vec3(1.,.55,.1),smoothstep(.2,.6,I));col=mix(col,vec3(1.,.9,.5),smoothstep(.55,.95,I));col*=1.-sp*.75;float mu=clamp(dot(n,v),0.,1.);col*=.45+.75*pow(mu,.6);gl_FragColor=vec4(col*k*1.25,1.);}`});SUNS.push(m);return m};
+/* ---------- stars ---------- */
+const stars=(()=>{const n=7000,p=new Float32Array(n*3),c=new Float32Array(n*3);for(let i=0;i<n;i++){const u=Math.random()*2-1,a=Math.random()*TAU,r=Math.sqrt(1-u*u);p.set([r*Math.cos(a)*800,u*800,r*Math.sin(a)*800],i*3);const b=.35+Math.random()*.65,w=Math.random();c.set([b*(.8+.2*w),b*.9,b*(1-.2*w)],i*3)}const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(p,3));g.setAttribute('color',new THREE.BufferAttribute(c,3));return new THREE.Points(g,new THREE.PointsMaterial({size:1.7,sizeAttenuation:false,vertexColors:true,transparent:true,depthWrite:false}))})();S.add(stars);
+const bs=(()=>{const n=260,p=new Float32Array(n*3),c=new Float32Array(n*3);for(let i=0;i<n;i++){const u=Math.random()*2-1,a=Math.random()*TAU,r=Math.sqrt(1-u*u);p.set([r*Math.cos(a)*780,u*780,r*Math.sin(a)*780],i*3);const w=Math.random(),b=.5+Math.random()*.5;c.set(w<.3?[.7*b,.8*b,b]:w<.7?[b,b,.9*b]:[b,.7*b,.45*b],i*3)}const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(p,3));g.setAttribute('color',new THREE.BufferAttribute(c,3));return new THREE.Points(g,new THREE.PointsMaterial({size:10,sizeAttenuation:false,map:gt,vertexColors:true,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending}))})();S.add(bs);
+const mw=new THREE.Mesh(new THREE.SphereGeometry(900,48,24),MB({map:mwT,side:THREE.BackSide,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,toneMapped:false,opacity:.8}));mw.rotation.set(.9,0,.5);mw.renderOrder=-5;S.add(mw);TL.load(TX+'galaxy_starfield.png',t=>{mw.material.map=t;mw.material.opacity=.75;mw.material.needsUpdate=true},undefined,()=>{});
+/* ---------- orrery ---------- */
+function mkOrrery(){const g=new THREE.Group(),go=MS({color:0xd6ac62,metalness:.7,roughness:.4,emissive:0x2c1d08}),cu=MS({color:0xb86a3c,metalness:.6,roughness:.45,emissive:0x1c0d05});
+const sunC=sph(1.5,MB({color:0xfff6dc,toneMapped:false}),48),sunS=sph(1.56,MB({map:sunT,transparent:true,opacity:.5,blending:THREE.AdditiveBlending,toneMapped:false,depthWrite:false}),48),sg1=glow(0xffc060,26),sg2=glow(0xfff4d8,10),sl=new THREE.PointLight(0xffe2b0,3.4);
+[sunC,sunS,sg1,sg2,sl].forEach(o=>o.position.y=1.4);[sg1,sg2].forEach(o=>{o.material.depthTest=false;o.renderOrder=9});
+for(let i=0;i<3;i++){const ar=new THREE.Mesh(new THREE.TorusGeometry(2.3,.045,8,96),MB({color:0xe8c880}));ar.position.y=1.4;ar.rotation.set(i*PI/3,i*PI/5,0);g.add(ar)}
+const col=new THREE.Mesh(new THREE.TorusGeometry(2,.2,12,64),go);col.rotation.x=PI/2;col.position.y=.2;const nk=new THREE.Mesh(new THREE.CylinderGeometry(.8,1.3,1.1,32),go);nk.position.y=.1;
+g.add(sunC,sunS,sg1,sg2,sl,col,nk,new THREE.AmbientLight(0x303a60,1.1),new THREE.HemisphereLight(0xffe6b0,0x1a1030,.6));
+const T=(Rr,r,y,m=go,sg=12,tg=180)=>{const t=new THREE.Mesh(new THREE.TorusGeometry(Rr,r,sg,tg),m);t.rotation.x=PI/2;t.position.y=y;g.add(t)};
+T(15,.6,0);T(15.3,.25,.7);T(14,.2,-.6);T(14.6,.07,2,go,6,160);
+for(let i=0;i<28;i++){const a=i/28*TAU,p=new THREE.Mesh(new THREE.CylinderGeometry(.07,.07,1.9,6),go);p.position.set(Math.cos(a)*14.6,1,Math.sin(a)*14.6);g.add(p)}
+for(let i=0;i<4;i++){const a=PI/4+i*PI/2,k=new THREE.Mesh(new THREE.CylinderGeometry(1,1,.7,32),go);k.position.set(Math.cos(a)*15.8,.1,Math.sin(a)*15.8);g.add(k)}
+const tk=new THREE.InstancedMesh(new THREE.BoxGeometry(.08,.04,.5),go,180),m4=new THREE.Matrix4(),q=new THREE.Quaternion();for(let i=0;i<180;i++){const a=i/180*TAU;m4.compose(V3(Math.cos(a)*15,.62,Math.sin(a)*15),q.setFromAxisAngle(V3(0,1,0),PI/2-a),V3(1,1,1));tk.setMatrixAt(i,m4)}g.add(tk);
+for(let i=0;i<8;i++){const a=i/8*TAU,s=new THREE.Mesh(new THREE.BoxGeometry(11,.1,.14),cu);s.position.set(Math.cos(a)*8.5,-1.3,Math.sin(a)*8.5);s.rotation.y=-a;g.add(s)}
+const hb=new THREE.Mesh(new THREE.CylinderGeometry(2.3,3,2.2,48),go);hb.position.y=-1.5;g.add(hb);
+const gs=[];[[4.6,26,-3.2,-2.7,3.4,.5],[3.2,18,3.8,-2.9,-2.2,.4],[2,12,.5,-3.2,5.2,.35]].forEach(([r,n,x,y,z,h],i)=>{const gp=new THREE.Group();gp.add(gear(r,n,h,i?cu:go));gp.position.set(x,y,z);g.add(gp);gs.push([gp,(i%2?1:-1)*(1.2-i*.3)])});
+const P=[],W=[1.46,.57,.35,.19,.03,.0125,.0044,.0022],D=[[3.8,.26,0x9c9488],[5,.32,0xe6cf9a],[6.4,.36,0],[7.9,.3,0xc6553a],[10,.78,1],[11.9,.64,2],[13.1,.46,0x8fdbe8],[14,.46,0x3a63d8]];
+D.forEach(([r,s0,c],i)=>{const s=s0*1.3,pv=new THREE.Group(),b=sph(s,MS({map:PT[i],bumpMap:BM[i],bumpScale:2,roughness:.75,metalness:0}),64);b.position.set(r,.3,0);b.add(atmo(s*1.12,AC[i]));pv.userData.b=b;OM[i]=b.material;
+const arm=new THREE.Mesh(new THREE.BoxGeometry(r,.07,.07),go);arm.position.set(r/2,.2,0);pv.add(b,arm);
+if(c===2){const rg=new THREE.RingGeometry(s*1.35,s*2.4,96),ps=rg.attributes.position,uv=rg.attributes.uv,v=new THREE.Vector3();for(let k=0;k<ps.count;k++){v.fromBufferAttribute(ps,k);uv.setXY(k,(v.length()-s*1.35)/(s*1.05),.5)}const rm=new THREE.Mesh(rg,MB({map:ringT,side:2,transparent:true,depthWrite:false}));RR(rm.material);rm.rotation.x=-PI/2+.4;rm.position.set(r,.3,0);pv.add(rm)}
+const o=new THREE.Mesh(new THREE.TorusGeometry(r,.03,6,200),MB({color:0xdcc9a0,transparent:true,opacity:.55}));o.rotation.x=PI/2;o.position.y=.2;g.add(o,pv);P.push(pv)});
+const cm=[];for(let i=0;i<10;i++){const s=glow(0xcfe0ff,(10-i)*.25+.2,1-i*.09);g.add(s);cm.push(s)}
+return{g,u:t=>{sunS.rotation.y=t*.1;const gz=26+Math.sin(t*2)*1.2;sg1.scale.set(gz,gz,1);const T2=t*1.8;P.forEach((p,i)=>{p.rotation.y=-(i*1.1+T2*W[i]);p.userData.b.rotation.y=t*.7/(1+i*.2)});gs.forEach(([gp,w])=>gp.rotation.y=t*w);cm.forEach((s,i)=>{const a=-t*.6-2+i*.07;s.position.set(Math.cos(a)*12,.6,Math.sin(a)*8)});$('#e1').textContent=(T2*W[2]/TAU).toFixed(2);$('#e2').textContent=(T2*W[1]/TAU).toFixed(2)}}}
+/* ---------- scenes ---------- */
+const CH=[['01','TRÁI ĐẤT & MẶT TRĂNG','#5b9cff'],['02','HỆ MẶT TRỜI TRONG','#ff9d3a'],['03','MỘC & THỔ','#ffd25a'],['04','RÌA HỆ MẶT TRỜI','#37e0c0'],['05','CÁC NGÔI SAO','#ff5fa8'],['06','LỖ ĐEN & SAO NEUTRON','#a06bff'],['07','THIÊN HÀ','#6b8cff'],['08','TOÀN VŨ TRỤ','#ffd98a']];
+const G=[],SC=[],add=o=>{const g=o.build();g.visible=false;S.add(g);G.push(g);SC.push(o)};
+const dl=(c,i,x,y,z)=>{const l=new THREE.DirectionalLight(c,i);l.position.set(x,y,z);return l};
+function init(){
+const orr=mkOrrery();['mercurymap.jpg','venusmap.jpg','earthmap1k.jpg','marsmap1k.jpg','jupitermap.jpg','saturnmap.jpg','uranusmap.jpg','neptunemap.jpg'].forEach((f,i)=>RM(OM[i],f,['mercurybump.jpg','venusbump.jpg','earthbump1k.jpg','marsbump1k.jpg'][i],.8));
+add({k:'orr',at:0,ch:0,dur:11.2,build:()=>orr.g,cam(t){const e=ease(Math.min(t/6,1)),a=-.3+t*.045;look(lp(-3,Math.sin(a)*22,e),lp(2.5,15,e),lp(17.5,Math.cos(a)*22+4,e),0,lp(1,-1,e),0)},upd:t=>orr.u(t)});
+// 01 Trái Đất
+{const earthM=MS({map:earthT,bumpMap:earthB,bumpScale:2,roughness:.8,metalness:0,emissive:0xffa050,emissiveMap:cityT,emissiveIntensity:1.3}),cM=MS({color:0xffffff,alphaMap:cloudT,transparent:true,depthWrite:false,roughness:1}),moM=MS({map:charT,bumpMap:moonB,bumpScale:3,roughness:1,emissive:0x444444}),g=new THREE.Group(),e=sph(40,earthM,96),cd=sph(40.5,cM,96),mo=sph(9,moM,64);mo.position.set(62,24,-90);e.position.y=cd.position.y=-46;e.rotation.z=cd.rotation.z=.2;
+ld('earth_atmos_2048.jpg',t=>{earthM.map=t;earthM.emissive.set(0);earthM.emissiveMap=null;earthM.bumpMap=null;earthM.needsUpdate=true;ld('earth_lights_2048.png',u=>{earthM.emissive.set(0xffb060);earthM.emissiveMap=u;earthM.emissiveIntensity=1.1;earthM.needsUpdate=true});ld('earth_normal_2048.jpg',u=>{earthM.normalMap=u;earthM.normalScale=new THREE.Vector2(.9,.9);earthM.needsUpdate=true})});ld('earth_clouds_1024.png',t=>{cM.map=t;cM.alphaMap=null;cM.needsUpdate=true});ld('moon_1024.jpg',t=>{moM.map=t;moM.needsUpdate=true});const sn=glow(0xffa040,22),fl=glow(0xffc880,1,.55);fl.scale.set(520,2,1);const sc=sph(3.4,MB({color:0xff9a3c}),32);[sn,fl,sc].forEach(o=>o.position.set(0,46,-200));
+const at=atmo(42.5,0x5aa0ff);at.position.y=-46;g.add(e,cd,mo,at,sn,fl,sc,dl(0xfff0e0,2.6,0,30,-60),new THREE.AmbientLight(0x6070a0,.45));
+add({k:'earth',at:18,ch:0,dur:4.2,sc:.18,ti:'TRÁI ĐẤT',su:'<span class=o>θ = 23,4°</span> &nbsp; T = 23,93 h',bl:'a = 1,00 AU<br>P = 365,26 ngày',br:'Ø = 12 756 km<br>g = 9,8 m/s²<br>vệ tinh: 1',build:()=>g,cam(t,u){look(0,lp(2,3,u),lp(32,26,u),0,-4,0)},upd:t=>{e.rotation.y=t*.03;cd.rotation.y=t*.037;mo.rotation.y=t*.01}})}
+// 02 Mặt Trời
+{const g=new THREE.Group(),s=sph(12,sunM(),128);g.add(s,glow(0xff9a30,60,.9),glow(0xffd070,40,.6));for(let i=0;i<8;i++){const a=Math.random()*TAU,m=new THREE.Mesh(new THREE.TorusGeometry(1.3+Math.random()*1.6,.22,8,40,PI),MB({color:0xff8a30,transparent:true,opacity:.75}));m.position.set(Math.cos(a)*12,Math.sin(a)*12,0);m.rotation.z=a-PI/2;g.add(m)}
+add({k:'sun',at:31.6,ch:1,dur:3.6,sc:.3,build:()=>g,cam(t,u){look(lp(-2,0,u),0,lp(42,34,u),0,0,0)},upd:t=>{s.rotation.y=t*.02;const K=[[17,'215 495'],[66,'842 769'],[104,'1 331 475'],[109,'1 392 700']],q=K[t<.9?0:t<1.8?1:t<2.6?2:3];lb('sl',q[0]+' Trái Đất<div></div><small>đường kính '+q[1]+' km</small>')}})}
+// 02 Sao Hỏa
+{const marM=MS({map:marsT,bumpMap:marsB,bumpScale:3,roughness:.95}),g=new THREE.Group(),m=sph(8,marM,96);RM(marM,'marsmap1k.jpg','marsbump1k.jpg',1);g.add(m,atmo(8.5,0xff7a40),dl(0xffe8d0,2.8,-12,4,8),new THREE.AmbientLight(0x331a10,.35));
+add({k:'mars',at:38.4,ch:1,dur:3.6,sc:.3,ti:'SAO HỎA',su:'<span class=o>θ = 25,2°</span> &nbsp; T = 24,6 h',bl:'a = 1,524 AU<br>P = 687 ngày',br:'Ø = 6 792 km<br>g = 3,7 m/s²<br>vệ tinh: 2',build:()=>g,cam(t,u){look(0,0,lp(30,24,u),0,0,0)},upd:t=>m.rotation.y=t*.08})}
+// 02 Định luật Kepler
+{const g=new THREE.Group();g.add(glow(0xffb050,10),sph(.9,MB({color:0xffd080}),24));const rg=(r,c,w=.07,o=1)=>{const m=new THREE.Mesh(new THREE.RingGeometry(r-w,r+w,200),MB({color:c,side:2,transparent:true,opacity:o}));m.rotation.x=-PI/2;g.add(m)};
+rg(22,0xff7a3d,.1);rg(15,0x7fb2ff,.1);rg(6,0xffffff,.03,.5);rg(9,0xffffff,.03,.5);rg(11.5,0xffffff,.03,.4);
+const pv=[];[[22,0xff7a3d,.5,.55],[15,0x7fb2ff,.9,.55],[9,0xe8e8e8,1.4,0],[6,0xcfcfcf,2.3,0],[11.5,0xd0b080,1.2,0]].forEach(([r,c,w,f],i)=>{const p=new THREE.Group(),b=sph(.45,MB({color:c}),16);b.position.x=r;p.add(b);if(f)for(let j=0;j<5;j++)for(let k=0;k<7;k++){const a1=r*j/5,a2=r*(j+1)/5-.15,wd=.09,m=new THREE.Mesh(new THREE.RingGeometry(Math.max(a1,.8),a2,10,1,-(k+1)*wd*1.6,wd*1.5),MB({color:c,side:2,transparent:true,opacity:.22}));m.rotation.x=-PI/2;p.add(m)}p.userData.w=w*.25;p.rotation.y=i*1.7;g.add(p);pv.push(p)});
+add({k:'kep',at:42,ch:1,dur:3.2,sc:.38,cap:'Kepler II · quét diện tích bằng nhau trong thời gian bằng nhau',build:()=>g,cam(t){const a=t*.05;look(Math.sin(a)*14,40,Math.cos(a)*14+26,0,0,0)},upd:t=>pv.forEach(p=>p.rotation.y=-(p.userData.w*t))})}
+// 03 Thổ tinh – vành đai
+{const g=new THREE.Group(),N=24000,pp=new Float32Array(N*3),pc=new Float32Array(N*3);const sM=MS({map:satT,roughness:.9});RM(sM,'saturnmap.jpg');g.add(sph(24,sM,64));
+for(let i=0;i<N;i++){let r;do{r=28+Math.random()*36}while(Math.sin(r*1.9)*.5+.5<Math.random()*.6);const a=Math.random()*TAU,b=.55+Math.random()*.4;pp.set([Math.cos(a)*r,(Math.random()-.5)*.35,Math.sin(a)*r],i*3);pc.set([b,b*.95,b*.88],i*3)}
+const pg=new THREE.BufferGeometry();pg.setAttribute('position',new THREE.BufferAttribute(pp,3));pg.setAttribute('color',new THREE.BufferAttribute(pc,3));g.add(new THREE.Points(pg,new THREE.PointsMaterial({size:.14,vertexColors:true,transparent:true,depthWrite:false})));
+const rk=new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1,0),MS({color:0xcfd8de,flatShading:true,roughness:.8}),700),m4=new THREE.Matrix4(),qq=new THREE.Quaternion();for(let i=0;i<700;i++){const r=28+Math.random()*36,a=Math.random()*TAU,s=.05+Math.pow(Math.random(),3)*.35;qq.setFromEuler(new THREE.Euler(Math.random()*6,Math.random()*6,0));m4.compose(V3(Math.cos(a)*r,(Math.random()-.5)*.3,Math.sin(a)*r),qq,V3(s,s*.8,s));rk.setMatrixAt(i,m4)}
+g.add(rk,dl(0xfff0dd,2.4,80,25,30),new THREE.AmbientLight(0x404a60,.5));
+add({k:'sat',at:55.6,ch:2,dur:3.2,sc:.3,cap:'274 vệ tinh (tính đến 2025)',build:()=>g,cam(t,u){const a=.3+t*.05,r=36;const x=Math.cos(a)*r,z=Math.sin(a)*r;look(x,.5+.3*Math.sin(t*.5),z,x-Math.sin(a)*10,-.4,z+Math.cos(a)*10)}})}
+// 04 Diêm Vương
+{const g=new THREE.Group(),plM=MS({map:plutoT,bumpMap:moonB,bumpScale:3,roughness:.95}),chM=MS({map:charT,bumpMap:moonB,bumpScale:3,roughness:.95}),p=sph(7,plM,64),c=sph(3.3,chM,48);RM(plM,'plutomap1k.jpg','plutobump1k.jpg');RM(chM,'moonmap1k.jpg','moonbump1k.jpg');p.position.set(4,-.5,0);g.add(p,c,atmo(7.4,0xffb070),dl(0xfff2e0,2.6,-14,6,10),new THREE.AmbientLight(0x221810,.3));
+add({k:'plu',at:62,ch:3,dur:2.4,sc:.45,ti:'DIÊM VƯƠNG',su:'<span class=o>θ = 122,5°</span> &nbsp; T = 6,39 ngày (ngược chiều)',bl:'a = 39,5 AU<br>P = 248 năm',br:'Ø = 2 377 km<br>g = 0,62 m/s²<br>vệ tinh: 5',build:()=>g,cam(t,u){look(0,0,lp(32,27,u),0,0,0)},upd:t=>{p.rotation.y=-t*.1;c.rotation.y=t*.1;c.position.set(-11+Math.sin(t*.2)*.6,3+Math.cos(t*.2)*.6,0)}})}
+// 05 Ngôi sao tiến hoá
+{const g=new THREE.Group(),s=sph(7,sunM(),96),sg=glow(0xffb070,34,.8),sw=glow(0xffffff,6);g.add(s,sg,sw);
+add({k:'star',at:72.4,ch:4,dur:3.2,sc:.5,ti:'+ 0,0 tỉ năm',cap:'Mặt Trời: bán kính thật · hành tinh phóng to',build:()=>g,cam(t,u){look(0,0,lp(40,30,u),0,0,0)},upd:(t,dt)=>{const u=t/3.2,k=ease(cl((u-.15)/.7));s.scale.setScalar(.12+.88*k);sg.scale.set(6+30*k,6+30*k,1);sw.material.opacity=1-k;s.material.uniforms.k.value.set(1,lp(1,.62,k),lp(.9,.5,k));s.material.uniforms.t.value=t;s.rotation.y=t*.05;lb('ti','+ '+(5*k).toFixed(1).replace('.',',')+' tỉ năm')}})}
+// 06 Pulsar
+{const g=new THREE.Group(),sp=new THREE.Group(),tilt=new THREE.Group(),cn=()=>new THREE.CylinderGeometry(4,.15,80,24,1,true);[[0xff8a4a,-30,12],[0x8a5cff,24,-6],[0x2fb8c0,0,-14],[0x4a6aff,-10,20]].forEach(([c,x,y])=>{const n=glow(c,130,.3);n.position.set(x,y,-40);g.add(n)});
+const mk=gm=>{const m=new THREE.Mesh(gm,MB({map:coneT,color:0xdfe8ff,transparent:true,opacity:.55,blending:THREE.AdditiveBlending,depthWrite:false,side:2}));return m};
+const c1=cn();c1.translate(0,40,0);c1.rotateZ(-PI/2);const c2=cn();c2.translate(0,40,0);c2.rotateZ(PI/2);sp.add(mk(c1),mk(c2));tilt.add(sp);tilt.rotation.x=.9;tilt.rotation.z=.3;g.add(tilt,sph(2.1,MB({color:0xffffff}),32),glow(0xffffff,16),glow(0xaac0ff,40,.5));
+add({k:'pul',at:78.8,ch:5,dur:3.6,sc:.66,ti:'PULSAR',su:'sao neutron · Ø = 20 km · chùm tia quét như hải đăng',build:()=>g,cam(t){look(Math.sin(t*.1)*2,0,20,0,0,0)},upd:t=>sp.rotation.y=t*1.4})}
+// 06 Lỗ đen
+{const g=new THREE.Group(),mt=o=>new THREE.ShaderMaterial({transparent:true,side:2,blending:THREE.AdditiveBlending,depthWrite:false,uniforms:{t:{value:0},o:{value:o}},vertexShader:'varying vec2 p;void main(){p=position.xy;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:'varying vec2 p;uniform float t,o;void main(){float r=length(p),a=atan(p.y,p.x);float s=.5+.5*sin(r*7.-t*1.2+sin(a*3.+t*.3)*1.5);float f=smoothstep(3.3,4.1,r)*(1.-smoothstep(8.,14.,r));vec3 c=mix(vec3(1.,.92,.72),vec3(.85,.48,.16),smoothstep(3.5,12.,r));gl_FragColor=vec4(c*(.5+.7*s)*(1.7-r*.09),f*o);}'});
+const m1=mt(1),m2=mt(.6),d1=new THREE.Mesh(new THREE.RingGeometry(3.2,14,160,1),m1),d2=new THREE.Mesh(new THREE.RingGeometry(3.3,9,160,1),m2);d1.rotation.x=-PI/2+.1;d2.position.z=-.6;
+const ph=new THREE.Mesh(new THREE.TorusGeometry(3.4,.05,8,128),MB({color:0xffe6b8}));ph.position.z=-.5;g.add(sph(3.2,MB({color:0x000000}),48),d1,d2,ph,glow(0xffa860,26,.35));
+add({k:'bh',at:82.4,ch:5,dur:6.8,sc:.7,ti:'SGR A*',su:'lỗ đen tâm Ngân Hà · 4 triệu lần khối lượng Mặt Trời',build:()=>g,cam(t){look(Math.sin(t*.06)*3,1.6+.3*Math.sin(t*.2),lp(34,13,ease(t/6.8)),0,0,0)},upd:t=>{m1.uniforms.t.value=m2.uniforms.t.value=t;if(t>3.4){lb('ti','');lb('su','');lb('cap','thời gian chậm lại')}}})}
+// 07 Thiên hà
+{const g=new THREE.Group(),A=galaxy(36000,26),B=galaxy(22000,18);A.rotation.x=.45;B.rotation.set(-.7,0,.5);g.add(A,B);
+add({k:'gal',at:89.2,ch:6,dur:10,sc:.82,build:()=>g,cam(t){const e=ease(cl(t/4));look(0,lp(54,22,e),lp(8,44,e),0,0,0)},upd:t=>{const k=ease(cl((t-4.2)/5.4));B.position.set(lp(60,9,k),lp(18,3,k),lp(-34,-6,k));A.rotation.x=lp(0,.45,ease(cl(t/4)));A.rotation.y=t*.06;B.rotation.y=-t*.08;if(t<3.6){lb('ti','NGÂN HÀ');lb('su','đường kính ≈ 100 000 năm ánh sáng · 100–400 tỉ ngôi sao')}else if(t<6.4){lb('ti','ANDROMEDA');lb('su','cách 2,5 triệu năm ánh sáng · đang tiến lại gần Ngân Hà')}else{lb('ti','VA CHẠM');lb('su','mô phỏng N-thể · hàng tỉ năm thu lại trong vài giây')}}})}
+// 08 Nền vi sóng
+{const g=new THREE.Group(),s=sph(10,MB({map:cmbT}),96);g.add(s,atmo(10.6,0xffcf8a));
+add({k:'cmb',at:102.4,ch:7,dur:3.6,sc:1,ti:'2,725 K',su:'bức xạ nền vi sóng · ánh sáng cổ nhất, 380 000 năm sau Vụ Nổ Lớn',cap:'bản đồ minh hoạ (dao động nhiệt độ ~ 1/100 000)',build:()=>g,cam(t,u){look(0,0,lp(32,26,u),0,0,0)},upd:t=>s.rotation.y=t*.05})}
+// 08 Tia sáng zoom-out
+{const g=new THREE.Group();[[-26,-8,.2],[-6,4,.18],[14,-2,.24],[30,6,.2]].forEach(([x,z,r],i)=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(7,300),MB({map:beamT,transparent:true,opacity:.55,blending:THREE.AdditiveBlending,depthWrite:false,side:2}));m.position.set(x,0,z);m.rotation.z=r;g.add(m)});
+const dt=glow(0x8ab4ff,1.4);dt.position.set(4,-3,0);g.add(dt);add({k:'bm',at:110.4,dur:2.2,ch:7,sc:1,ti:'CHẤM XANH NHẠT',su:'Trái Đất nhìn từ 6 tỉ km — Voyager 1, 1990',build:()=>g,cam(t){look(0,0,40-t*2,0,0,0)}})}
+add({k:'out',at:112.6,ch:7,dur:5.8,build:()=>orr.g,cam(t){const e=ease(cl(t/6)),a=.6+t*.05;look(Math.sin(a)*lp(70,26,e),lp(40,16,e),Math.cos(a)*lp(70,26,e),0,-1,0)},upd:t=>orr.u(t+30)});
+
+// ===== cảnh bổ sung theo đúng trình tự video =====
+const cr2=(r,c,o=.9,w=.05)=>{const m=new THREE.Mesh(new THREE.RingGeometry(r-w,r+w,180),MB({color:c,side:2,transparent:true,opacity:o}));m.rotation.x=-PI/2;return m};
+const sunB=r=>{const g=new THREE.Group();g.add(sph(r,sunM(),96),glow(0xff9a30,r*5,.9),glow(0xffd070,r*3.2,.6));return g};
+const topCam=(t,u)=>look(Math.sin(t*.3)*4,lp(30,52,u),14,0,0,0);
+add({k:'ttl',at:11.2,dur:3.6,ch:0,ti:'VẺ ĐẸP<br>THIÊN VĂN',build:()=>orr.g,cam:topCam,upd:t=>orr.u(t+12)});
+add({k:'out',at:14.8,dur:3.2,ch:0,build:()=>orr.g,cam(t){const a=.8+t*.12;look(Math.sin(a)*24,13,Math.cos(a)*24,0,-1,0)},upd:t=>orr.u(t+15)});
+add({k:'ttl',at:118.4,dur:4.7,ch:0,ti:'VẺ ĐẸP<br>THIÊN VĂN',build:()=>orr.g,cam:topCam,upd:t=>orr.u(t+40)});
+// 1 AU
+{const g=new THREE.Group(),e=sph(1,MS({map:earthT,roughness:.8}),48),ln=new THREE.Line(new THREE.BufferGeometry().setFromPoints([V3(),V3(1,0,0)]),new THREE.LineBasicMaterial({color:0xffffff}));RM(e.material,'earthmap1k.jpg','earthbump1k.jpg');g.add(sunB(2.6),cr2(13,0xdfe8ff),e,ln,new THREE.PointLight(0xffe2b0,2.2),new THREE.AmbientLight(0x334466,.7));
+add({k:'orb',at:22.2,dur:2.8,ch:0,sc:.2,cap:'<b style="font-size:21px">1 AU</b><br>150 000 000 km<br><small>phóng to, tua nhanh — không đúng tỉ lệ</small>',build:()=>g,cam(t,u){look(lp(0,3,u),lp(9,13,u),lp(30,26,u),0,0,0)},upd:t=>{const a=t*.7+1;e.position.set(Math.cos(a)*13,0,-Math.sin(a)*13);e.rotation.y=t*2;ln.geometry.setFromPoints([V3(),e.position.clone()])}})}
+// Mặt Trăng + so sánh kích thước
+{const g=new THREE.Group(),mM=MS({map:charT,bumpMap:moonB,bumpScale:3,roughness:1}),m=sph(6,mM,64);RM(mM,'moonmap1k.jpg','moonbump1k.jpg');g.add(m,dl(0xffffff,2.4,6,4,10),new THREE.AmbientLight(0x202838,.5));
+add({k:'moon',at:25,dur:4.6,ch:0,sc:.2,build:()=>g,cam(t,u){look(0,0,lp(15,19,u),0,0,0)},upd:t=>{m.rotation.y=t*.05}})}
+// Nhật thực
+{const g=new THREE.Group();g.add(glow(0xffffff,26,.9),glow(0xbfd0ff,50,.35));for(let i=0;i<16;i++){const s=glow(0xffffff,1,.4);s.scale.set(10+Math.random()*26,2.2,1);s.material.rotation=i/16*TAU+Math.random()*.2;g.add(s)}g.add(sph(2.6,MB({color:0x050507}),48));
+add({k:'ecl',at:29.6,dur:2,ch:0,sc:.3,cap:'nhật thực toàn phần',build:()=>g,cam(){look(0,0,18,0,0,0)}})}
+// Sao Thủy / Sao Kim đi ngang Mặt Trời
+const trs=(at,dur,ti,su,bl,br,pr,pc,pos)=>{const g=new THREE.Group(),p=sph(pr,MB({color:pc}),32);g.add(sunB(10),p);add({k:'trs',at,dur,ch:1,sc:.3,ti,su,bl,br,build:()=>g,cam(){look(0,0,34,0,0,0)},upd:t=>{p.position.set(lp(-pos,pos,t/dur),lp(-2,3,t/dur)*.5,12)}})};
+trs(35.2,3.2,'SAO KIM','<span class=o>θ = 177,4°</span> &nbsp; T = 243 ngày (ngược chiều)','a = 0,723 AU<br>P = 224,7 ngày','Ø = 12 104 km<br>g = 8,9 m/s²<br>vệ tinh: 0',1.5,0x2a1a0e,18);
+// Sao Mộc + 4 vệ tinh Galilê
+{const g=new THREE.Group(),jM=MS({map:jupT,roughness:.9}),j=sph(9,jM,96),mo=[];RM(jM,'jupitermap.jpg');g.add(j,atmo(9.6,0xffd8a0),dl(0xfff0e0,2.6,-14,4,10),new THREE.AmbientLight(0x1a1410,.4));
+[[14,.9,0xe8c070,.9],[18,.8,0xcfc8b8,.55],[24,1.3,0xb0a090,.35],[31,1.1,0x8a7a6a,.2]].forEach(([r,s,c,w])=>{g.add(cr2(r,0xdcd0c0,.5,.05));const m=sph(s,MS({color:c,roughness:.9}),24);RM(m.material,'moonmap1k.jpg');m.userData={r,w};g.add(m);mo.push(m)});
+add({k:'jup',at:45.2,dur:3.6,ch:2,sc:.3,ti:'SAO MỘC',su:'<span class=o>θ = 3,1°</span> &nbsp; T = 9,9 h',cap:'chu kỳ Io : Europa : Ganymede = 1 : 2 : 4',bl:'a = 5,20 AU<br>P = 11,86 năm',br:'Ø = 142 984 km<br>g = 24,79 m/s²<br>vệ tinh: 95',build:()=>g,cam(t,u){look(0,12,lp(52,44,u),0,0,0)},upd:t=>{j.rotation.y=t*.25;mo.forEach(m=>{const a=t*m.userData.w*2+m.userData.r;m.position.set(Math.cos(a)*m.userData.r,0,-Math.sin(a)*m.userData.r)})}})}
+// Dải tiểu hành tinh
+{const g=new THREE.Group(),N=3000,pp=new Float32Array(N*3);for(let i=0;i<N;i++)pp.set([(Math.random()-.5)*160,(Math.random()-.5)*90,-Math.random()*220],i*3);const pg=new THREE.BufferGeometry();pg.setAttribute('position',new THREE.BufferAttribute(pp,3));g.add(new THREE.Points(pg,new THREE.PointsMaterial({size:.5,color:0xcfc8c0,transparent:true,opacity:.8})));
+const ag=new THREE.IcosahedronGeometry(6,5),ps=ag.attributes.position,v=V3();for(let i=0;i<ps.count;i++){v.fromBufferAttribute(ps,i);v.multiplyScalar(1+.56*(fbm(v.x*.25+4,v.y*.25,v.z*.25,4)-.5));ps.setXYZ(i,v.x,v.y,v.z)}ag.computeVertexNormals();
+const as=new THREE.Mesh(ag,MS({color:0xb59f84,roughness:1}));as.position.set(11,0,-30);g.add(as,dl(0xfff0e0,2.2,10,8,10),new THREE.AmbientLight(0x303030,.5));
+add({k:'ast',at:48.8,dur:2.8,ch:2,sc:.3,build:()=>g,cam(t,u){const z=lp(20,-24,u);look(0,0,z,0,0,z-20)},upd:t=>as.rotation.y=t*.3})}
+// Sao Thổ + vành đai
+{const g=new THREE.Group(),sM=MS({map:satT,roughness:.9}),sp=sph(6,sM,96),rg=new THREE.RingGeometry(8.2,14.6,128),ps=rg.attributes.position,uv=rg.attributes.uv,v=V3();RM(sM,'saturnmap.jpg');for(let k=0;k<ps.count;k++){v.fromBufferAttribute(ps,k);uv.setXY(k,(v.length()-8.2)/6.4,.5)}
+const rm=new THREE.Mesh(rg,MS({map:ringT,side:2,transparent:true,depthWrite:false,roughness:1})),tl=new THREE.Group();RR(rm.material);rm.rotation.x=-PI/2;tl.add(sp,rm);tl.rotation.set(.35,0,.45);g.add(tl,dl(0xfff2e0,2.8,-10,6,12),new THREE.AmbientLight(0x151515,.4));
+add({k:'sat2',at:51.6,dur:4,ch:2,sc:.3,ti:'SAO THỔ',su:'<span class=o>θ = 26,7°</span> &nbsp; T = 10,7 h',bl:'a = 9,54 AU<br>P = 29,4 năm',br:'Ø = 120 536 km<br>g = 9,0 m/s²<br>vệ tinh: 274 (tính đến 2025)',build:()=>g,cam(t,u){look(0,3,lp(46,26,ease(u)),0,0,0)},upd:t=>sp.rotation.y=t*.2})}
+// Thiên Vương tinh
+{const g=new THREE.Group(),uM=MS({map:uraT,roughness:.9}),u0=sph(6,uM,64),rg=new THREE.Mesh(new THREE.RingGeometry(8,10.5,96),MB({color:0xbfd8da,side:2,transparent:true,opacity:.45}));RM(uM,'uranusmap.jpg');rg.rotation.y=PI/2-.2;g.add(u0,rg,atmo(6.5,0x9ae8f0),dl(0xffffff,2.6,-8,6,12),new THREE.AmbientLight(0x204040,.5));
+add({k:'ura',at:58.8,dur:1.2,ch:3,sc:.45,ti:'THIÊN VƯƠNG',su:'<span class=o>θ = 97,8° — quay "nằm nghiêng"</span>',build:()=>g,cam(t,u){look(0,0,lp(30,24,u),0,0,0)},upd:t=>u0.rotation.y=t*.3})}
+// Hải Vương tinh
+{const g=new THREE.Group(),nM=MS({map:nepT,roughness:.9}),n=sph(6,nM,64);RM(nM,'neptunemap.jpg');g.add(n,atmo(6.6,0x5a7aff),dl(0xffffff,2.4,-8,6,12),new THREE.AmbientLight(0x101840,.6));
+add({k:'nep',at:60,dur:2,ch:3,sc:.45,ti:'HẢI VƯƠNG',su:'<span class=o>θ = 28,3°</span> &nbsp; T = 16,1 h',bl:'a = 30,07 AU<br>P = 164,8 năm',br:'Ø = 49 528 km<br>g = 11,15 m/s²<br>vệ tinh: 16 (tính đến 2025)',build:()=>g,cam(t,u){look(0,0,lp(36,22,ease(u)),0,0,0)},upd:t=>n.rotation.y=t*.3})}
+// Sao chổi (vành đai Kuiper) + Voyager 1
+{const g=new THREE.Group(),cm=new THREE.Group(),vg=new THREE.Group();cm.add(glow(0xffffff,9),glow(0xaad4ff,16,.6));
+const tail=(c,len,w,rot)=>{const gm=new THREE.CylinderGeometry(w,.2,len,20,1,true);gm.translate(0,len/2,0);gm.rotateZ(PI/2+rot);cm.add(new THREE.Mesh(gm,MB({map:coneT,color:c,transparent:true,opacity:.75,blending:THREE.AdditiveBlending,depthWrite:false,side:2})))};tail(0x6aa8ff,40,3,.12);tail(0xffffff,32,4,-.06);
+const mt=MS({color:0xdcdcdc,metalness:.4,roughness:.5,side:2}),dish=new THREE.Mesh(new THREE.SphereGeometry(4,36,12,0,TAU,0,.8),mt);dish.rotation.x=PI/2;const bus=new THREE.Mesh(new THREE.BoxGeometry(1.8,1.2,1.8),MS({color:0xb8a060,metalness:.5}));bus.position.z=-1.5;const bm=new THREE.Mesh(new THREE.CylinderGeometry(.07,.07,22,6),MS({color:0x555555}));bm.rotation.x=.9;bm.position.set(0,-6,-5);vg.add(dish,bus,bm);vg.rotation.set(.3,-.6,0);
+g.add(cm,vg,dl(0xffffff,2.4,10,8,14),new THREE.AmbientLight(0x303848,.8));
+add({k:'vgr',at:64.4,dur:4,ch:3,sc:.45,build:()=>g,cam(){look(0,0,26,0,0,0)},upd:t=>{const s=t>1.7;cm.visible=!s;vg.visible=s;cm.position.x=lp(-8,10,Math.min(t/1.7,1));vg.rotation.y=-.6+t*.15;lb('cap',s?'<b style="font-size:17px;letter-spacing:.12em">VOYAGER 1</b><br><small>phóng năm 1977 · cách Mặt Trời = 170 AU</small>':'vành đai Kuiper')}})}
+// Sirius + tinh vân Orion
+{const g=new THREE.Group(),sr=new THREE.Group(),or=new THREE.Group();sr.add(glow(0xffffff,6),glow(0xbcd4ff,18,.5));const sp=glow(0xffffff,1,.6);sp.scale.set(40,.5,1);sr.add(sp);
+[[0xff4f8c,26,0,0,.5],[0xff7aa0,20,-6,3,.45],[0x66e0e8,14,1,0,.55],[0xff4f8c,18,7,-4,.4],[0x8affff,9,-2,2,.5]].forEach(([c,s,x,y,o])=>{const q=glow(c,s,o);q.position.set(x,y,0);or.add(q)});g.add(sr,or);
+add({k:'sir',at:68.4,dur:4,ch:4,sc:.5,build:()=>g,cam(){look(0,0,30,0,0,0)},upd:t=>{const s=t<2.2;sr.visible=s;or.visible=!s;lb('cap',s?'Sirius · 8,6 năm ánh sáng':'tinh vân Orion · cách 1 344 năm ánh sáng')}})}
+// Siêu tân tinh
+{const g=new THREE.Group(),N=5000,pp=new Float32Array(N*3),pc=new Float32Array(N*3),dir=[];for(let i=0;i<N;i++){const u=Math.random()*2-1,a=Math.random()*TAU,r=Math.sqrt(1-u*u),s=.4+Math.random()*.6;dir.push([r*Math.cos(a)*s,u*s,r*Math.sin(a)*s]);pc.set(Math.random()<.5?[1,.55,.35]:[.5,.85,1],i*3)}
+const pg=new THREE.BufferGeometry(),pa=new THREE.BufferAttribute(pp,3),fl=glow(0xffffff,30);pg.setAttribute('position',pa);pg.setAttribute('color',new THREE.BufferAttribute(pc,3));g.add(new THREE.Points(pg,new THREE.PointsMaterial({size:.5,vertexColors:true,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending})),fl);
+add({k:'sn',at:75.6,dur:3.2,ch:4,sc:.5,ti:'SIÊU TÂN TINH',build:()=>g,cam(){look(0,0,30,0,0,0)},upd:t=>{const k=(1-Math.exp(-t*.9))*14;for(let i=0;i<N;i++)pp.set([dir[i][0]*k,dir[i][1]*k,dir[i][2]*k],i*3);pa.needsUpdate=true;fl.material.opacity=Math.max(0,1-t*1.4);const s=18+t*10;fl.scale.set(s,s,1)}})}
+// Mạng lưới vũ trụ + giãn nở
+{const g=new THREE.Group(),N=26000,pp=new Float32Array(N*3),pc=new Float32Array(N*3),nd=[];for(let i=0;i<14;i++)nd.push(V3((Math.random()-.5)*60,(Math.random()-.5)*34,(Math.random()-.5)*30));
+for(let i=0;i<N;i++){const q=nd[i%14].clone().lerp(nd[(i*7+3)%14],Math.random());q.x+=(Math.random()-.5)*4;q.y+=(Math.random()-.5)*4;q.z+=(Math.random()-.5)*4;pp.set([q.x,q.y,q.z],i*3);pc.set(Math.random()<.5?[.55,.35,.9]:[.5,.85,1],i*3)}
+const pg=new THREE.BufferGeometry();pg.setAttribute('position',new THREE.BufferAttribute(pp,3));pg.setAttribute('color',new THREE.BufferAttribute(pc,3));const web=new THREE.Points(pg,new THREE.PointsMaterial({size:.35,vertexColors:true,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending}));g.add(web);nd.slice(0,3).forEach(n=>{const q=glow(0xffd070,7,.9);q.position.copy(n);g.add(q)});
+add({k:'web',at:99.2,dur:3.2,ch:7,sc:1,ti:'MẠNG LƯỚI VŨ TRỤ',su:'mỗi điểm sáng là một cụm hàng nghìn thiên hà',build:()=>g,cam(t,u){look(0,0,lp(50,38,u),0,0,0)},upd:t=>{web.rotation.y=t*.03;web.scale.setScalar(1)}});
+add({k:'web',at:106,dur:4.4,ch:7,sc:1,ti:'GIÃN NỞ',su:'không gian giãn ra, các thiên hà lùi xa nhau',build:()=>g,cam(t,u){look(0,0,lp(40,58,u),0,0,0)},upd:t=>{web.scale.setScalar(1+t*.12)}})}
+// sắp xếp theo mốc thời gian của video
+{const o=SC.map((s,i)=>i).sort((a,b)=>SC[a].at-SC[b].at),s2=o.map(i=>SC[i]),g2=o.map(i=>G[i]);SC.splice(0,SC.length,...s2);G.splice(0,G.length,...g2)}
+let tot=0;SC.forEach(s=>{s.t0=tot;tot+=s.dur});SC.tot=tot;
+$('#dots').innerHTML=CH.map(()=>'<u></u>').join('');
+$('#ld').remove();go(0);requestAnimationFrame(frame)}
+let LAB={};const lb=(id,v)=>{if(LAB[id]!==v){LAB[id]=v;$('#'+id).innerHTML=v}};
+/* ---------- điều khiển ---------- */
+let si=-1,st=0,last=performance.now(),pz=false;const fd=$('#fade'),pb=$('#pb');
+function go(i){i=(i+SC.length)%SC.length;G[si]&&(G[si].visible=false);si=i;st=0;const s=SC[i],c=CH[s.ch];G[i].visible=true;document.body.dataset.s=s.k;document.body.style.setProperty('--c',c[2]);
+$('#ch b').textContent=c[0];$('#ch span').textContent=c[1];[...$('#dots').children].forEach((d,j)=>d.className=j==s.ch?'a':'');
+['ti','su','bl','br','cap'].forEach(k=>$('#'+k).innerHTML=s[k]||'');LAB={};$('#ti').style.opacity=1;$('#sd').style.left=((s.sc||0)*100)+'%';
+const h=$('#hud');h.style.animation='none';h.offsetWidth;h.style.animation=''}
+function frame(now){requestAnimationFrame(frame);const dt=Math.min((now-last)/1000,.1);last=now;if(!pz){st+=dt;if(st>=SC[si].dur)go(si+1)}
+const s=SC[si];s.cam(st,st/s.dur);s.upd&&s.upd(st,dt);[stars,bs,mw].forEach(o=>o.position.copy(C.position));SUNS.forEach(m=>m.uniforms.t.value=now/1000);fd.style.opacity=1-Math.min(1,st/.9,(s.dur-st)/.9);if(aud&&au.duration){const tp=(s.t0+st)/SC.tot*au.duration;if(Math.abs(au.currentTime-tp)>.4)au.currentTime=tp;if(pz!==au.paused)pz?au.pause():au.play().catch(()=>{})}pb.style.width=((s.t0+st)/SC.tot*100)+'%';R.render(S,C)}
+const au=document.getElementById('au');let aud=false;au.volume=.85;
+function startAud(){if(aud)return;aud=true;au.play().catch(()=>{});const k=document.getElementById('hint');k&&k.remove()}
+addEventListener('click',()=>{if(!aud){startAud();return}pz=!pz});
+addEventListener('keydown',e=>{if(e.key=='ArrowRight')go(si+1);else if(e.key=='ArrowLeft')go(si-1);else if(e.key==' ')pz=!pz;else if(e.key=='m')au.muted=!au.muted;startAud()});
+setTimeout(()=>{au.play().then(()=>{aud=true;document.getElementById('hint').remove()}).catch(()=>{});try{init()}catch(e){document.getElementById('ld').innerHTML='Lỗi: '+e.message;console.error(e)}},60);
+</script></body></html>
